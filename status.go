@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"net/http"
 	"os"
 
@@ -8,79 +9,97 @@ import (
 	cecil "github.com/kofiasare/cecil/logger"
 )
 
-var l = cecil.NewLogger(os.Stdout, "", 0)
+const (
+	version = " version 0.1"
+)
+
+var (
+	l   = cecil.NewLogger(os.Stdout, "", 0)
+	err = errors.New("unknown status")
+)
+
+type HTTPStatusCodess struct {
+}
 
 // HTTPStatusCode New
 type HTTPStatusCode struct {
-	c int
-	m string
-	d string
+	statusCode  int
+	message     string
+	description string
+	color       color.Attribute
+	*AssociateError
 }
 
-func describe(c *HTTPStatusCode) {
-	prettyPrint(c)
-}
-
-func listAll() {
-	for code := range HTTPStatusCodes {
-		c := &HTTPStatusCode{code, statusMessage(code), statusDescription(code)}
-		l.Printf("%d - %s", c.c, c.m)
-	}
-}
-
-func alert(smt string) {
-	color.Set(color.Bold, color.FgRed)
-	defer color.Unset()
-	l.Println(smt)
-}
-
-func lookUpMesg(c int, v bool) (*HTTPStatusCode, bool) {
+// LookUp returns an HTTPStatusCode with
+func (h *HTTPStatusCodess) LookUp(c int, v bool) (*HTTPStatusCode, *AssociateError) {
 	switch http.StatusText(c) {
 	case "":
-		return nil, false
+		return &HTTPStatusCode{color: color.FgRed}, &AssociateError{err}
 	default:
 		if v {
-			return &HTTPStatusCode{c, statusMessage(c), statusDescription(c)}, true
+			return &HTTPStatusCode{
+				statusCode:  c,
+				message:     statusMessage(c),
+				description: statusDescription(c),
+				color:       statusColor(c),
+			}, nil
 		}
-		return &HTTPStatusCode{c: c, m: statusMessage(c)}, true
+
+		return &HTTPStatusCode{
+			statusCode: c,
+			message:    statusMessage(c),
+			color:      statusColor(c),
+		}, nil
+
 	}
+}
+
+// Describe describes or explains an HTTPStatusCode
+func (h *HTTPStatusCodess) Describe(sc *HTTPStatusCode) {
+	prettyPrint(sc)
 }
 
 // preety print to stdout
 // what you have
 func prettyPrint(hs *HTTPStatusCode) {
-
-	// Switch to the right formatting
-	// 1xx => Yellow
-	// 2xx => Green
-	// 3xx => White
-	// 4xx and 5xx => Red
-	switch {
-
-	// 1xx Informational
-	case hs.c < 200:
-		color.Set(color.Bold, color.FgYellow)
-		l.Printf("  %d - %s", hs.c, hs.m)
-
-		// 2xx Success
-	case hs.c < 300:
-		color.Set(color.Bold, color.FgGreen)
-		l.Printf("  %d - %s", hs.c, hs.m)
-
-		// 3xx Redirection
-	case hs.c < 400:
-		color.Set(color.Bold, color.FgWhite)
-		l.Printf("  %d - %s", hs.c, hs.m)
-
-		// 4xx Client Error
-		// 5xx Server Error
-	case hs.c < 500 || hs.c <= 600:
-		color.Set(color.Bold, color.FgRed)
-		l.Printf("  %d - %s", hs.c, hs.m)
-	}
-
-	if hs.d != "" {
-		defer l.Println(hs.d)
+	color.Set(color.Bold, hs.color)
+	l.Printf("  %d - %s", hs.statusCode, hs.message)
+	if hs.description != "" {
+		defer l.Println(hs.description)
 	}
 	defer color.Unset()
+}
+
+// ListAll list all HTTPStatusCodes
+func (h *HTTPStatusCodess) ListAll() {
+	for code := range HTTPStatusCodes {
+		c := &HTTPStatusCode{
+			statusCode:  code,
+			message:     statusMessage(code),
+			description: statusDescription(code),
+		}
+		l.Printf("%d - %s", c.statusCode, c.message)
+	}
+
+}
+
+// AssociateError HTTPStatusCode Error
+type AssociateError struct {
+	err error
+}
+
+// DescribeErrFrom describes or explains an error
+// always "unkown status"
+func (ae *AssociateError) DescribeErrFrom(hsc *HTTPStatusCode) {
+	ae.printError(ae, hsc)
+}
+
+func (ae *AssociateError) printError(err *AssociateError, hsc *HTTPStatusCode) {
+	defer color.Unset()
+	color.Set(color.Bold, hsc.color)
+	l.Println(err.errorMessage())
+}
+
+func (ae *AssociateError) errorMessage() string {
+	return ae.err.Error()
 }

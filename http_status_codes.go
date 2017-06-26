@@ -1,11 +1,14 @@
 package main
 
+import "github.com/fatih/color"
+
 // HTTPStatusCodes map of all httpstatus "code"s
 // from Go' stdlib
-var HTTPStatusCodes = map[int]map[string]string{
+var HTTPStatusCodes = map[int]map[string]interface{}{
 	// 1xx Informational
 	100: {
 		"message": "Continue",
+		"color":   color.FgYellow,
 		"description": `
   The initial part of a request has been received and has not yet been rejected by the
   server. The server intends to send a final response after the request has been fully
@@ -23,6 +26,7 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	101: {
 		"message": "Switching Protocols",
+		"color":   color.FgYellow,
 		"description": `
   The server understands and is willing to comply with the client's request, via the Upgrade 
   header field, for a change in the application protocol being used on this connection. The 
@@ -34,12 +38,13 @@ var HTTPStatusCodes = map[int]map[string]string{
   
   For example, switching to a newer version of HTTP might be advantageous over older versions, 
   and switching to a real-time, synchronous protocol might be advantageous when delivering 
-  resources that use such features.'
+  resources that use such features.
 `,
 	},
 
 	102: {
 		"message": "Processing",
+		"color":   color.FgYellow,
 		"description": `
   An interim response used to inform the client that the server has accepted the complete 
   request, but has not yet completed it. This status code SHOULD only be sent when the server
@@ -52,7 +57,7 @@ var HTTPStatusCodes = map[int]map[string]string{
   
   In such cases, the client may time-out the connection while waiting for a response. To prevent
   this, the server may return a 102 Processing status code to indicate to the client that the server 
-  is still processing the method.'
+  is still processing the method.
 `,
 	},
 
@@ -60,6 +65,7 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	200: {
 		"message": "OK",
+		"color":   color.FgGreen,
 		"description": `
   The request has succeeded.
 
@@ -73,12 +79,13 @@ var HTTPStatusCodes = map[int]map[string]string{
   header section.
   
   A 200 response is cacheable by default; i.e., unless otherwise indicated by the method
-  definition or explicit cache controls.'
+  definition or explicit cache controls.
         `,
 	},
 
 	201: {
 		"message": "Created",
+		"color":   color.FgGreen,
 		"description": `
   The request has been fulfilled and has resulted in one or more new resources being created.
   
@@ -93,6 +100,7 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	202: {
 		"message": "Accepted",
+		"color":   color.FgGreen,
 		"description": `
   The request has been accepted for processing, but the processing has not been completed.
   
@@ -113,6 +121,7 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	203: {
 		"message": "Non-Authoritative Information",
+		"color":   color.FgGreen,
 		"description": `
   The request was successful but the enclosed payload has been modified from that of the origin server's 
   200 OK response by a transforming proxy.
@@ -130,6 +139,7 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	204: {
 		"message": "No Content",
+		"color":   color.FgGreen,
 		"description": `
   The server has successfully fulfilled the request and that there is no additional content to send in the response
   payload body. Metadata in the response header fields refer to the target resource and its selected representation
@@ -157,6 +167,7 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	205: {
 		"message": "Reset Content",
+		"color":   color.FgGreen,
 		"description": `
   The server has fulfilled the request and desires that the user agent reset the "document view", which caused the request
   to be sent, to its original state as received from the origin server. This response is intended to support a common data
@@ -168,58 +179,68 @@ var HTTPStatusCodes = map[int]map[string]string{
   205 response. In other words, a server MUST do one of the following for a 205 response: a) indicate a zero-length body for 
   the response by including a Content-Length header field with a value of 0; b) indicate a zero-length payload for the response
   by including a Transfer-Encoding header field with a value of chunked and a message body consisting of a single chunk of
-  zero-length; or, c) close the connection immediately after sending the blank line terminating the header section.'
+  zero-length; or, c) close the connection immediately after sending the blank line terminating the header section.
         `,
 	},
 
 	206: {
 		"message":     "Continue",
+		"color":       color.FgGreen,
 		"description": "",
 	},
 
 	207: {
 		"message":     "Continue",
+		"color":       color.FgGreen,
 		"description": "",
 	},
 
 	208: {
 		"message":     "Continue",
+		"color":       color.FgGreen,
 		"description": "",
 	},
 
 	226: {
 		"message":     "Continue",
+		"color":       color.FgGreen,
 		"description": "",
 	},
 
 	// 3xx Redirection
 	300: {
 		"message":     "Continue",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	301: {
-		"message":     "Continue",
+		"message":     "Moved Permanently",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	302: {
-		"message":     "Continue",
+		"message":     "Found",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	303: {
 		"message":     "Continue",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	304: {
 		"message":     "Continue",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	305: {
 		"message": "Use Proxy",
+		"color":   color.FgWhite,
 		"description": `
   Defined in a previous version of this specification and is now deprecated, due to security concerns regarding in-band 
   configuration of a proxy.
@@ -228,153 +249,184 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	306: {
 		"message":     "Continue",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	307: {
 		"message":     "Continue",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	308: {
 		"message":     "Continue",
+		"color":       color.FgWhite,
 		"description": "",
 	},
 
 	//4xx Client Error
 
 	400: {
-		"message":     "Continue",
+		"message":     "Bad Request",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	401: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	402: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	403: {
-		"message":     "Continue",
+		"message":     "Unauthorized",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	404: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	405: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	406: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	407: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	408: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	409: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	410: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	411: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	412: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	413: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	414: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	415: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	416: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	417: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	418: {
-		"message":     "Continue",
+		"message": "Continue",
+
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	422: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	423: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	424: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	426: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	428: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	429: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	431: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	451: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
@@ -382,67 +434,83 @@ var HTTPStatusCodes = map[int]map[string]string{
 
 	500: {
 		"message":     "Internal Server Error",
+		"color":       color.FgRed,
 		"description": "Hello",
 	},
 
 	501: {
-		"message":     "Continue",
+		"message": "Continue",
+
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	502: {
 		"message": "Bad Gateway",
+		"color":   color.FgRed,
 		"description": `
   The server, while acting as a gateway or proxy, received an invalid response from an inbound server it accessed while 
-  attempting to fulfill the request.'
+  attempting to fulfill the request.
         `,
 	},
 
 	503: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	504: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	505: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	506: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	507: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	508: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	510: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 
 	511: {
 		"message":     "Continue",
+		"color":       color.FgRed,
 		"description": "",
 	},
 }
 
 func statusMessage(code int) string {
-	return HTTPStatusCodes[code]["message"]
+	return HTTPStatusCodes[code]["message"].(string)
 }
 
 func statusDescription(code int) string {
-	return HTTPStatusCodes[code]["description"]
+	return HTTPStatusCodes[code]["description"].(string)
+}
+
+func statusColor(code int) color.Attribute {
+	return HTTPStatusCodes[code]["color"].(color.Attribute)
 }

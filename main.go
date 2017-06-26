@@ -1,6 +1,7 @@
 package main
 
 import "flag"
+import "fmt"
 
 func main() {
 	// Lets get code to lookup for with some
@@ -12,22 +13,26 @@ func main() {
 	c := flag.Int("c", 0, "the status code you want to lookup")
 	l := flag.Bool("l", false, "list all HTTP status codes")
 	v := flag.Bool("v", false, "verbose ")
+	ver := flag.Bool("version", false, "show version")
 	flag.Parse()
+
+	// make reference to HTTPStatusCode
+	hsc := new(HTTPStatusCodess)
 
 	// Lets lookup for code by passing our cli args to
 	//  this lookUp() function.
 	if *c > 0 {
-		hsc, found := lookUpMesg(*c, *v)
+		sc, err := hsc.LookUp(*c, *v)
 
 		// let us know the search outcome
 		// when found describe the status
 		// code to us otherwise say to us
 		// "unknown status"
-		if found {
-			describe(hsc)
+		if err != nil {
+			err.DescribeErrFrom(sc)
 			return
 		}
-		alert("  unknown status")
+		hsc.Describe(sc)
 		return
 	}
 
@@ -35,7 +40,12 @@ func main() {
 	// passing our cli args to the lookUp() mtd
 	// of hscExplorer
 	if *l {
-		listAll()
+		hsc.ListAll()
+		return
+	}
+
+	if *ver {
+		fmt.Println(version)
 		return
 	}
 
