@@ -4,7 +4,7 @@ go:
   - 1.8
 
 before_install:
-  - go get github.com/kofiasare/cecil
+  - go get github.com/kofiasare/cecil/logger
 
 script:
   - go test 
