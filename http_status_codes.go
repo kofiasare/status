@@ -2,9 +2,9 @@ package main
 
 import "github.com/fatih/color"
 
-// HTTPStatusCodes map of all httpstatus "code"s
+// StatusCodes map of all httpstatus "code"s
 // from Go' stdlib
-var HTTPStatusCodes = map[int]map[string]interface{}{
+var StatusCodes = map[int]map[string]interface{}{
 	// 1xx Informational
 	100: {
 		"message": "Continue",
@@ -504,13 +504,13 @@ var HTTPStatusCodes = map[int]map[string]interface{}{
 }
 
 func statusMessage(code int) string {
-	return HTTPStatusCodes[code]["message"].(string)
+	return StatusCodes[code]["message"].(string)
 }
 
 func statusDescription(code int) string {
-	return HTTPStatusCodes[code]["description"].(string)
+	return StatusCodes[code]["description"].(string)
 }
 
 func statusColor(code int) color.Attribute {
-	return HTTPStatusCodes[code]["color"].(color.Attribute)
+	return StatusCodes[code]["color"].(color.Attribute)
 }

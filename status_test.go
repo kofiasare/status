@@ -2,11 +2,9 @@ package main
 
 import "testing"
 
-var hsc = new(HTTPStatusCodess)
+var hsc = &HTTPStatusCodes{}
 
 func TestLookUp(t *testing.T) {
-
-	hsc := new(HTTPStatusCodess)
 
 	for _, d := range testData {
 		h, err := hsc.LookUp(d.statusCode, false)

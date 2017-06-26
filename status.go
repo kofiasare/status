@@ -18,7 +18,7 @@ var (
 	err = errors.New("unknown status")
 )
 
-type HTTPStatusCodess struct {
+type HTTPStatusCodes struct {
 }
 
 // HTTPStatusCode New
@@ -31,7 +31,7 @@ type HTTPStatusCode struct {
 }
 
 // LookUp returns an HTTPStatusCode with
-func (h *HTTPStatusCodess) LookUp(c int, v bool) (*HTTPStatusCode, *AssociateError) {
+func (h *HTTPStatusCodes) LookUp(c int, v bool) (*HTTPStatusCode, *AssociateError) {
 	switch http.StatusText(c) {
 	case "":
 		return &HTTPStatusCode{color: color.FgRed}, &AssociateError{err}
@@ -55,7 +55,7 @@ func (h *HTTPStatusCodess) LookUp(c int, v bool) (*HTTPStatusCode, *AssociateErr
 }
 
 // Describe describes or explains an HTTPStatusCode
-func (h *HTTPStatusCodess) Describe(sc *HTTPStatusCode) {
+func (h *HTTPStatusCodes) Describe(sc *HTTPStatusCode) {
 	prettyPrint(sc)
 }
 
@@ -71,8 +71,8 @@ func prettyPrint(hs *HTTPStatusCode) {
 }
 
 // ListAll list all HTTPStatusCodes
-func (h *HTTPStatusCodess) ListAll() {
-	for code := range HTTPStatusCodes {
+func (h *HTTPStatusCodes) ListAll() {
+	for code := range StatusCodes {
 		c := &HTTPStatusCode{
 			statusCode:  code,
 			message:     statusMessage(code),

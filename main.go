@@ -11,13 +11,13 @@ func main() {
 	// verbose is used along with options c for verbose
 	// documentation
 	c := flag.Int("c", 0, "the status code you want to lookup")
-	l := flag.Bool("l", false, "list all HTTP status codes")
+	a := flag.Bool("a", false, "list all HTTP status codes")
 	v := flag.Bool("v", false, "verbose ")
 	ver := flag.Bool("version", false, "show version")
 	flag.Parse()
 
 	// make reference to HTTPStatusCode
-	hsc := new(HTTPStatusCodess)
+	hsc := &HTTPStatusCodes{}
 
 	// Lets lookup for code by passing our cli args to
 	//  this lookUp() function.
@@ -39,7 +39,7 @@ func main() {
 	// With our refrecence, lets lookup for code
 	// passing our cli args to the lookUp() mtd
 	// of hscExplorer
-	if *l {
+	if *a {
 		hsc.ListAll()
 		return
 	}
