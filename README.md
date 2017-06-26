@@ -1,4 +1,7 @@
 # status
+
+https://travis-ci.org/kofiasare/status.svg?branch=master
+
 Status is a simple `HTTP` status code lookup tool written in Go. lookup `HTTP` statuscodes right in your
 terminal.
 
