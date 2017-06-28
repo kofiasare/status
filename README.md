@@ -27,7 +27,7 @@ Get help.
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/kofiasaree.
+Bug reports and pull requests are welcome on GitHub at https://github.com/kofiasare/status.
 
 The is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
