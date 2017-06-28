@@ -2,11 +2,11 @@ package main
 
 import (
 	"errors"
+	"log"
 	"net/http"
 	"os"
 
 	"github.com/fatih/color"
-	cecil "github.com/kofiasare/cecil/logger"
 )
 
 const (
@@ -14,14 +14,14 @@ const (
 )
 
 var (
-	l   = cecil.NewLogger(os.Stdout, "", 0)
+	l   = log.New(os.Stdout, "", 0)
 	err = errors.New("unknown status")
 )
 
-type HTTPStatusCodes struct {
-}
+// HTTPStatusCodes all http status codes
+type HTTPStatusCodes struct{}
 
-// HTTPStatusCode New
+// HTTPStatusCode  Represents an HTTPStatusCode
 type HTTPStatusCode struct {
 	statusCode  int
 	message     string
@@ -31,73 +31,51 @@ type HTTPStatusCode struct {
 }
 
 // LookUp returns an HTTPStatusCode with
+// any lookup error, nil if the lookup
+// found something, "unknown" if nothing
+// found
 func (h *HTTPStatusCodes) LookUp(c int, v bool) (*HTTPStatusCode, *AssociateError) {
 	switch http.StatusText(c) {
 	case "":
 		return &HTTPStatusCode{color: color.FgRed}, &AssociateError{err}
 	default:
 		if v {
-			return &HTTPStatusCode{
-				statusCode:  c,
-				message:     statusMessage(c),
-				description: statusDescription(c),
-				color:       statusColor(c),
-			}, nil
+			return &HTTPStatusCode{c, statusMessage(c), statusDescription(c), statusColor(c), nil}, nil
 		}
-
-		return &HTTPStatusCode{
-			statusCode: c,
-			message:    statusMessage(c),
-			color:      statusColor(c),
-		}, nil
-
+		return &HTTPStatusCode{statusCode: c, message: statusMessage(c), color: statusColor(c)}, nil
 	}
 }
 
 // Describe describes or explains an HTTPStatusCode
 func (h *HTTPStatusCodes) Describe(sc *HTTPStatusCode) {
-	prettyPrint(sc)
-}
-
-// preety print to stdout
-// what you have
-func prettyPrint(hs *HTTPStatusCode) {
-	color.Set(color.Bold, hs.color)
-	l.Printf("  %d - %s", hs.statusCode, hs.message)
-	if hs.description != "" {
-		defer l.Println(hs.description)
+	color.Set(color.Bold, sc.color)
+	l.Printf("  %d - %s", sc.statusCode, sc.message)
+	if sc.description != "" {
+		defer l.Println(sc.description)
+		defer color.Unset()
 	}
-	defer color.Unset()
 }
 
 // ListAll list all HTTPStatusCodes
 func (h *HTTPStatusCodes) ListAll() {
 	for code := range StatusCodes {
-		c := &HTTPStatusCode{
-			statusCode:  code,
-			message:     statusMessage(code),
-			description: statusDescription(code),
-		}
+		c := &HTTPStatusCode{statusCode: code, message: statusMessage(code)}
 		l.Printf("%d - %s", c.statusCode, c.message)
 	}
 
 }
 
-// AssociateError HTTPStatusCode Error
+// AssociateError HTTPStatusCode lookup error
 type AssociateError struct {
 	err error
 }
 
-// DescribeErrFrom describes or explains an error
+// DescribeErr describes or explains an error
 // always "unkown status"
-func (ae *AssociateError) DescribeErrFrom(hsc *HTTPStatusCode) {
-	ae.printError(ae, hsc)
-}
-
-func (ae *AssociateError) printError(err *AssociateError, hsc *HTTPStatusCode) {
-	defer color.Unset()
+func (ae *AssociateError) DescribeErr(hsc *HTTPStatusCode) {
 	color.Set(color.Bold, hsc.color)
-	l.Println(err.errorMessage())
+	defer color.Unset()
+	l.Println(ae.errorMessage())
 }
 
 func (ae *AssociateError) errorMessage() string {

@@ -29,7 +29,7 @@ func main() {
 		// code to us otherwise say to us
 		// "unknown status"
 		if err != nil {
-			err.DescribeErrFrom(sc)
+			err.DescribeErr(sc)
 			return
 		}
 		hsc.Describe(sc)

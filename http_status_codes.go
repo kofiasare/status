@@ -104,18 +104,18 @@ var StatusCodes = map[int]map[string]interface{}{
 		"description": `
   The request has been accepted for processing, but the processing has not been completed.
   
-  The request might or might not eventually be acted upon, as it might be disallowed when processing
-  actually takes place. There is no facility in HTTP for re-sending a status code from an asynchronous
-  operation.
+  The request might or might not eventually be acted upon, as it might be disallowed when 
+  processing actually takes place. There is no facility in HTTP for re-sending a status code 
+  from an asynchronous operation.
   
   The 202 response is intentionally noncommittal. Its purpose is to allow a server to accept a
   request for some other process (perhaps a batch-oriented process that is only run once perday)
   without requiring that the user agent's connection to the server persist until the process is 
   completed. 
   
-  The representation sent with this response ought to describe the request's current status and point to
-  (or embed) a status monitor that can provide the user with an estimate of when the request will be
-  fulfilled.'
+  The representation sent with this response ought to describe the request's current status and
+  point to (or embed) a status monitor that can provide the user with an estimate of when the 
+  request will be fulfilled.'
         `,
 	},
 
@@ -123,17 +123,17 @@ var StatusCodes = map[int]map[string]interface{}{
 		"message": "Non-Authoritative Information",
 		"color":   color.FgGreen,
 		"description": `
-  The request was successful but the enclosed payload has been modified from that of the origin server's 
-  200 OK response by a transforming proxy.
+  The request was successful but the enclosed payload has been modified from that of the origin 
+  server's 200 OK response by a transforming proxy.
   
-  This status code allows the proxy to notify recipients when a transformation has been applied, since that
-  knowledge might impact later decisions regarding the content. For example, future cache validation requests
-  for the content might only be applicable along the same request path (through the same proxies). The 203
-  response is similar to the Warning code of 214 Transformation Applied 2, which has the advantage of
-  being applicable to responses with any status code.
+  This status code allows the proxy to notify recipients when a transformation has been applied, 
+  since that knowledge might impact later decisions regarding the content. For example, future 
+  cache validation requests for the content might only be applicable along the same request path 
+  (through the same proxies). The 203 response is similar to the Warning code of 214 Transformation 
+  Applied 2, which has the advantage of being applicable to responses with any status code.
   
-  A 203 response is cacheable by default; i.e., unless otherwise indicated by the method definition or explicit
-  cache controls.
+  A 203 response is cacheable by default; i.e., unless otherwise indicated by the method definition
+  or explicit cache controls.
         `,
 	},
 
