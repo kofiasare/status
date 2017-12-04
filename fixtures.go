@@ -19,7 +19,7 @@ var testData = []*HTTPStatusCode{
 		"",
 		``,
 		color.FgRed,
-		&AssociateError{errors.New("unknown status")},
+		errors.New("HTTP status code not found"),
 	},
 	{
 		200,

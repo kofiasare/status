@@ -16,20 +16,16 @@ func main() {
 	ver := flag.Bool("version", false, "show version")
 	flag.Parse()
 
-	// make reference to HTTPStatusCode
-	hsc := &HTTPStatusCodes{}
+	// HTTPStatusCodes
+	hsc := new(HTTPStatusCodes)
 
-	// Lets lookup for code by passing our cli args to
-	//  this lookUp() function.
+	// lookup code
 	if *c > 0 {
 		sc, err := hsc.LookUp(*c, *v)
 
-		// let us know the search outcome
-		// when found describe the status
-		// code to us otherwise say to us
-		// "unknown status"
+		// search outcome
 		if err != nil {
-			err.DescribeErr(sc)
+			hsc.DescribeErr(sc)
 			return
 		}
 		hsc.Describe(sc)
